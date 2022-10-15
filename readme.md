@@ -9,5 +9,5 @@ Use python 3.10+ to run
     # install requirements
     > pip install -r requirements.txt
     # run development server
-    > uvicorn main:app --reload --port 8001
+    > uvicorn main:app --reload --port 8000
 ```
