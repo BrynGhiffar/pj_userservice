@@ -1,4 +1,3 @@
-from importlib.abc import ResourceLoader
 from bson import ObjectId
 from pymongo import ReturnDocument
 from adapter.repository.config import get_database
@@ -8,7 +7,9 @@ from bson.errors import InvalidId
 user_collection = lambda: get_database()["user"]
 
 def create_user(user: User) -> User | None:
-    res = user_collection().insert_one(user.dict())
+    user_dict = user.dict()
+    del user_dict["user_id"]
+    res = user_collection().insert_one(user_dict)
     user.user_id = str(res.inserted_id)
     return user
 

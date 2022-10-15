@@ -53,6 +53,7 @@ def update_user(user: User) -> User | Error:
         user_by_provider = user_repository.find_user_by_provider_id(user.provider, user.provider_id)
         if user_by_provider and (user.user_id != user_by_provider.user_id):
             return ProviderIdAlreadyExistsError()
+
     user = user_repository.update_user(user)
     if not user:
         return UserNotFoundError()

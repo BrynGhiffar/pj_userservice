@@ -4,19 +4,16 @@ from adapter.router.user import user_handler
 
 from adapter.router.user.example import FIND_USER_BY_ID_RESPONSE_EXAMPLE
 from adapter.router.user.user_handler import CreateUserResponse, UpdateUserResponse, UpdateUserDescriptionBody
+import datetime
 
 router = APIRouter()
-
-@router.get("/")
-async def health_check():
-    return "API IS OK"
 
 @router.get(
     "/{user_id}",
     response_model=User,
     responses={
         200: {
-            "description": "User with user_id",
+            "description": "returned when user is found",
             "content": {
                 "application/json": {
                     "example": FIND_USER_BY_ID_RESPONSE_EXAMPLE

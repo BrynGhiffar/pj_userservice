@@ -7,11 +7,12 @@ from adapter.router.user import user_router as user
 from dotenv import load_dotenv
 
 import datetime
-
-USER_BASE_PATH = "/service/user"
-VERSION_1 = "/v1"
+import os
 
 load_dotenv()
+USER_BASE_PATH = os.getenv("BASE_PATH")
+VERSION_1 = os.getenv("VERSION_1")
+
 app = FastAPI()
 app.include_router(
     user.router,
@@ -39,7 +40,7 @@ def read_root():
         response_model=UserProjectResponse,
         responses={
             200: {
-                "description": "returns projects associated with the particular user_id",
+                "description": "returned when user is found",
                 "content": {
                     "application/json": {
                         "example": {
