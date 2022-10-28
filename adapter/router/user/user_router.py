@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from domain.user.user_entity import User
 from adapter.router.user import user_handler
 
-from adapter.router.user.example import FIND_USER_BY_ID_RESPONSE_EXAMPLE
+from adapter.router.user.example.find_user_by_id_example import FIND_USER_BY_ID_RESPONSE_EXAMPLE
 from adapter.router.user.user_handler import CreateUserResponse, UpdateUserResponse, UpdateUserDescriptionBody
 import datetime
 
