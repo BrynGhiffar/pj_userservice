@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 from domain.user.user_entity import User
 from adapter.router.user import user_handler
 
 from adapter.router.user.example.find_user_by_id_example import FIND_USER_BY_ID_RESPONSE_EXAMPLE
+from adapter.router.user.example.update_user_example import *
 from adapter.router.user.user_handler import CreateUserResponse, UpdateUserResponse, UpdateUserDescriptionBody
 import datetime
 
@@ -41,9 +42,19 @@ def create_user(user: User):
 
 @router.put(
     "/",
-    response_model=UpdateUserResponse
+    response_model=UpdateUserResponse,
+    responses={
+        200: {
+            "description": "returned when the user details are updated",
+            "content": {
+                "application/json": {
+                    "example": UPDATE_USER_RESPONSE_EXAMPLE
+                }
+            }
+        }
+    }
 )
-def update_user(user: User):
+def update_user(user: User = Body(example=UPDATE_USER_BODY_EXAMPLE)):
     return user_handler.update_user(user)
 
 @router.put(
