@@ -1,10 +1,7 @@
 from bson import ObjectId
 from pymongo import ReturnDocument
-from adapter.repository.config import get_database
 from domain.user.user_entity import User
 from bson.errors import InvalidId
-
-user_collection = lambda: get_database()["user"]
 
 class UserRepository:
 
