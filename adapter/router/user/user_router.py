@@ -1,15 +1,23 @@
 from fastapi import APIRouter, Body
 from domain.user.user_entity import User
-from adapter.router.user import user_handler
 from adapter.router.user.example.find_user_by_provider_example import FIND_USER_BY_PROVIDER_RESPONSE_EXAMPLE
 from adapter.router.user.example.find_user_by_id_example import FIND_USER_BY_ID_RESPONSE_EXAMPLE
 from adapter.router.user.example.update_user_description_example import UPDATE_USER_DESCRIPTION_EXAMPLE
 from adapter.router.user.example.create_user_example import CREATE_USER_RESPONSE_EXAMPLE
 from adapter.router.user.example.update_user_example import *
-from adapter.router.user.user_handler import CreateUserResponse, UpdateUserResponse, UpdateUserDescriptionBody
-import datetime
+from adapter.router.user.user_handler import CreateUserResponse, UpdateUserResponse, UpdateUserDescriptionBody, UserHandler
+from domain.user.user_service import UserService
+from adapter.repository.user_repository import UserRepository
+from adapter.repository.config import get_database
 
 router = APIRouter()
+user_handler = UserHandler(
+    user_service=UserService(
+        user_repository=UserRepository(
+            user_repository_config=lambda: get_database()["user"]
+        )
+    )
+)
 
 @router.get(
     "/{user_id}",
