@@ -72,6 +72,8 @@ class UserService:
         return res
 
     def find_user_by_provider_id(self, provider: str, provider_id: str) -> User | UserWithProviderIdNotFoundError:
+
+
         res = self.user_repository.find_user_by_provider_id(provider, provider_id)
         if not res:
             return UserWithProviderIdNotFoundError(provider, provider_id)
@@ -82,12 +84,15 @@ class UserService:
                                         | UserWithEmailAlreadyExistsError \
                                         | UserCreationError:
 
+
+        # PROVIDER ID VALIDATION
         if user.provider and user.provider_id:
             user_by_provider_id = self.user_repository.find_user_by_provider_id(user.provider, user.provider_id)
             if user_by_provider_id:
                 return UserWithProviderIdAlreadyExistsError(user.provider, user.provider_id)
         
 
+        # EMAIL VALIDATION
         if user.email:
             user_by_email = self.user_repository.find_user_by_email(user.email)
             if user_by_email:
@@ -95,6 +100,8 @@ class UserService:
         else:
             return UserMissingEmailError()
         
+
+        # CREATING THE USER
         user = self.user_repository.create_user(user)
         if not user:
             return UserCreationError()
@@ -104,6 +111,8 @@ class UserService:
                                         | UserWithEmailAlreadyExistsError \
                                         | UserWithProviderIdAlreadyExistsError:
 
+        # USER EXISTS VALIDATION
+        # to check if the user with the id exists
         find_user = self.user_repository.find_user_by_id(user.user_id)
         if not find_user:
             return UserWithUserIdNotFoundError(user.user_id)
