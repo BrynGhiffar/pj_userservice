@@ -1,14 +1,9 @@
-from domain.user import user_service
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from domain.user.user_entity import User
 from domain.user.user_service import UserServiceError, \
-                                    UserWithUserIdNotFoundError, \
-                                    UserWithEmailAlreadyExistsError, \
-                                    UserWithProviderIdAlreadyExistsError, \
                                     UserService, \
-                                    UserWithProviderIdNotFoundError, \
                                     UserServiceExtraError
 
 class CreateUserResponse(BaseModel):
@@ -43,9 +38,10 @@ class UserHandler:
 
     def find_user_by_id(self, user_id: str):
         res = self.user_service.find_user_by_id(user_id)
-        if isinstance(res, UserWithUserIdNotFoundError):
+        if isinstance(res, UserServiceError):
             find_user_by_id_response = jsonable_encoder(FindUserByIdResponse(
-                message=f"{res.name}: {res.message}"
+                message=f"{res.name}: {res.message}",
+                user=None
             ))
             return JSONResponse(content=find_user_by_id_response, status_code=404, media_type="application/json")
         else:
@@ -59,12 +55,14 @@ class UserHandler:
         res = self.user_service.find_user_by_provider_id(provider, provider_id)
         if isinstance(res, UserServiceExtraError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}. {res.extra_message}"
+                message=f"{res.name}: {res.message}. {res.extra_message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         elif isinstance(res, UserServiceError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}"
+                message=f"{res.name}: {res.message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         else:
@@ -79,12 +77,14 @@ class UserHandler:
 
         if isinstance(res, UserServiceExtraError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}. {res.extra_message}"
+                message=f"{res.name}: {res.message}. {res.extra_message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         elif isinstance(res, UserServiceError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}"
+                message=f"{res.name}: {res.message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         else:
@@ -98,12 +98,14 @@ class UserHandler:
         res = self.user_service.update_user(user)
         if isinstance(res, UserServiceExtraError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}. {res.extra_message}"
+                message=f"{res.name}: {res.message}. {res.extra_message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         elif isinstance(res, UserServiceError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}"
+                message=f"{res.name}: {res.message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         else:
@@ -119,12 +121,14 @@ class UserHandler:
         res = self.user_service.update_user_description(user_id, description)
         if isinstance(res, UserServiceExtraError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}. {res.extra_message}"
+                message=f"{res.name}: {res.message}. {res.extra_message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         elif isinstance(res, UserServiceError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}"
+                message=f"{res.name}: {res.message}",
+                user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         else:

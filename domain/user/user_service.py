@@ -82,9 +82,8 @@ class UserService:
         return res
 
     def create_user(self, user: User) -> User \
-                                        | UserWithProviderIdAlreadyExistsError \
-                                        | UserWithEmailAlreadyExistsError \
-                                        | UserCreationError:
+                                        | UserServiceExtraError \
+                                        | UserServiceError:
 
 
         # PROVIDER ID VALIDATION
@@ -104,20 +103,24 @@ class UserService:
         
 
         # CREATING THE USER
-        user = self.user_repository.create_user(user)
-        if not user:
+        created_user = self.user_repository.create_user(user)
+        if not created_user:
             return UserCreationError()
         
         # SEND USER CREATED NOTIFICATION
-        self.notification_service.send_user_created_notification(user.user_id, user.email, user.name)
+        user_id = created_user.user_id if created_user.user_id else "no user id, this is a problem"
+        email = created_user.email if not (created_user.email is None) else "no email, this is a problem"
+        self.notification_service.send_user_created_notification(user_id, email, user.name)
 
         return user
 
     def update_user(self, user: User) -> User \
-                                        | UserWithEmailAlreadyExistsError \
-                                        | UserWithProviderIdAlreadyExistsError:
+                                        | UserServiceExtraError \
+                                        | UserServiceError:
 
         # USER EXISTS VALIDATION
+        if user.user_id is None:
+            return UserWithUserIdNotFoundError("None")
         # to check if the user with the id exists
         find_user = self.user_repository.find_user_by_id(user.user_id)
         if not find_user:
@@ -152,6 +155,6 @@ class UserService:
             return UserWithUserIdNotFoundError(user_id)
         user.description = description
         new_user = self.user_repository.update_user(user)
-        if not user:
+        if not new_user:
             return UserUpdateError()
         return new_user

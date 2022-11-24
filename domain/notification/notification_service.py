@@ -8,7 +8,7 @@ class NotificationService:
     def send_message(self, title: str, message: str, body: str) -> None:
         to_be_sent = message + "\n"
         to_be_sent += f"> **{title}**\n"
-        for i, line in enumerate(body.splitlines()):
+        for line in body.splitlines():
             to_be_sent += f"> {line}\n"
         self.api.send_message(to_be_sent)
     
