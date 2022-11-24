@@ -7,14 +7,22 @@ from adapter.router.user.example.create_user_example import CREATE_USER_RESPONSE
 from adapter.router.user.example.update_user_example import *
 from adapter.router.user.user_handler import CreateUserResponse, UpdateUserResponse, UpdateUserDescriptionBody, UserHandler
 from domain.user.user_service import UserService
+from domain.notification.notification_service import NotificationService
 from adapter.repository.user_repository import UserRepository
 from adapter.repository.config import get_database
+from adapter.discord.api import DiscordApi
+from adapter.discord.config import get_webhook
 
 router = APIRouter()
 user_handler = UserHandler(
     user_service=UserService(
         user_repository=UserRepository(
             user_repository_config=lambda: get_database()["user"]
+        ),
+        notification_service=NotificationService(
+            api=DiscordApi(
+                webhook_url=get_webhook()
+            )
         )
     )
 )

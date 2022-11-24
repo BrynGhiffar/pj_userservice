@@ -1,5 +1,6 @@
 from adapter.repository.user_repository import UserRepository
 from domain.user.user_entity import User
+from domain.notification.notification_service import NotificationService
 
 class UserServiceError:
     def __init__(self):
@@ -62,8 +63,9 @@ class UserUpdateError(UserServiceError):
 
 class UserService:
 
-    def __init__(self, user_repository: UserRepository):
+    def __init__(self, user_repository: UserRepository, notification_service: NotificationService):
         self.user_repository = user_repository
+        self.notification_service = notification_service
 
     def find_user_by_id(self, user_id: str) -> User | UserWithUserIdNotFoundError:
         res = self.user_repository.find_user_by_id(user_id)
@@ -105,6 +107,10 @@ class UserService:
         user = self.user_repository.create_user(user)
         if not user:
             return UserCreationError()
+        
+        # SEND USER CREATED NOTIFICATION
+        self.notification_service.send_user_created_notification(user.user_id, user.email, user.name)
+
         return user
 
     def update_user(self, user: User) -> User \
