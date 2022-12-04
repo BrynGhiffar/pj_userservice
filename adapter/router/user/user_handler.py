@@ -38,7 +38,13 @@ class UserHandler:
 
     def find_user_by_id(self, user_id: str):
         res = self.user_service.find_user_by_id(user_id)
-        if isinstance(res, UserServiceError):
+        if isinstance(res, UserServiceExtraError):
+            content = jsonable_encoder(FindUserByProviderResponse(
+                message=f"{res.name}: {res.message}. {res.extra_message}",
+                user=None
+            ))
+            return JSONResponse(content=content, status_code=404, media_type="application/json")
+        elif isinstance(res, UserServiceError):
             find_user_by_id_response = jsonable_encoder(FindUserByIdResponse(
                 message=f"{res.name}: {res.message}",
                 user=None
@@ -61,7 +67,7 @@ class UserHandler:
             return JSONResponse(content=content, status_code=404, media_type="application/json")
         elif isinstance(res, UserServiceError):
             content = jsonable_encoder(FindUserByProviderResponse(
-                message=f"{res.name}: {res.message}",
+                message=f"{res.name}: {res.message}....",
                 user=None
             ))
             return JSONResponse(content=content, status_code=404, media_type="application/json")
