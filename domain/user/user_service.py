@@ -204,3 +204,9 @@ class UserService:
         if not new_user:
             return UserUpdateError()
         return new_user
+    
+    def find_all_user(self) -> list[User] | DatabaseConnectionError:
+        all_user = self.user_repository.find_all_user()
+        if isinstance(all_user, TimeoutConnectionError):
+            return DatabaseConnectionError(all_user.extra_message)
+        return all_user
