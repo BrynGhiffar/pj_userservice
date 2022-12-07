@@ -4,6 +4,7 @@ from adapter.router.user.example.find_user_by_provider_example import FIND_USER_
 from adapter.router.user.example.find_user_by_id_example import FIND_USER_BY_ID_RESPONSE_EXAMPLE
 from adapter.router.user.example.update_user_description_example import UPDATE_USER_DESCRIPTION_EXAMPLE
 from adapter.router.user.example.create_user_example import CREATE_USER_RESPONSE_EXAMPLE
+from adapter.router.user.example.find_all_user_example import FIND_ALL_USER_EXAMPLE
 from adapter.router.user.example.update_user_example import *
 from adapter.router.user.user_handler import CreateUserResponse, UpdateUserResponse, UpdateUserDescriptionBody, UserHandler
 from domain.user.user_service import UserService
@@ -60,6 +61,23 @@ def find_user_by_id(user_id: str):
 )
 def find_user_by_provider(provider: str, provider_id: str):
     return user_handler.find_user_by_provider(provider, provider_id)
+
+@router.get(
+    "/",
+    response_model=list[User],
+    responses={
+        200: {
+            "description": "returns all users in the database",
+            "content": {
+                "application/json": {
+                    "example": FIND_ALL_USER_EXAMPLE
+                }
+            }
+        }
+    }
+)
+def find_all_user():
+    return user_handler.find_all_user()
 
 @router.post(
     "/",
