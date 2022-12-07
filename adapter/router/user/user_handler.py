@@ -31,6 +31,9 @@ class UpdateUserDescriptionResponse(BaseModel):
     message: str
     user: User | None
 
+class FindAllUserResponse(BaseModel):
+    message: str
+    users: list[User] | None
 
 class UserHandler:
     def __init__(self, user_service: UserService):
@@ -141,5 +144,26 @@ class UserHandler:
             update_user_description_response = jsonable_encoder(UpdateUserDescriptionResponse(
                 message="user description updated",
                 user=res
+            ))
+            return JSONResponse(content=update_user_description_response, status_code=200, media_type="application/json")
+    
+    def find_all_user(self):
+        res = self.user_service.find_all_user()
+        if isinstance(res, UserServiceExtraError):
+            content = jsonable_encoder(FindAllUserResponse(
+                message=f"{res.name}: {res.message}. {res.extra_message}",
+                users=None
+            ))
+            return JSONResponse(content=content, status_code=404, media_type="application/json")
+        elif isinstance(res, UserServiceError):
+            content = jsonable_encoder(FindAllUserResponse(
+                message=f"{res.name}: {res.message}",
+                users=None
+            ))
+            return JSONResponse(content=content, status_code=404, media_type="application/json")
+        else:
+            update_user_description_response = jsonable_encoder(FindAllUserResponse(
+                message="found all users",
+                users=res
             ))
             return JSONResponse(content=update_user_description_response, status_code=200, media_type="application/json")
