@@ -12,7 +12,7 @@ Use python 3.10+ to run
     > uvicorn main:app --reload --port 8000
 ```
 ## Attention
-* When running the this service with a `mongodb+srv` connection. You need to change the configuration in the `adapter/repository/config.py` to use the `tlsCAFile`.
+* When running this service with a `mongodb+srv` connection. You need to change the configuration in the `adapter/repository/config/config.py` to use the `tlsCAFile`.
 # Using Docker Containers
 If you are building using the docker container and have mongodb installed locally,
 then you would want to change the `.env` file in the configuration and set 
