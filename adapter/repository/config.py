@@ -8,6 +8,8 @@ def get_database():
     DB_NAME = os.getenv("MONGO_DB_NAME")
 
     client = MongoClient(CONNECTION_STRING)
+    # use this for accessing a mongodb+srv database instead
+    # client = MongoClient(CONNECTION_STRING, tlsCAFile=ca)
     if not DB_NAME:
         DB_NAME = "mongodb://localhost:27017/"
 
