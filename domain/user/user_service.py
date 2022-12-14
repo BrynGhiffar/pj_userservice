@@ -210,3 +210,9 @@ class UserService:
         if isinstance(all_user, TimeoutConnectionError):
             return DatabaseConnectionError(all_user.extra_message)
         return all_user
+
+    def find_user_by_name(self, name:str) -> list[User] | DatabaseConnectionError:
+        all_user = self.user_repository.find_user_by_name(name)
+        if isinstance(all_user, TimeoutConnectionError):
+            return DatabaseConnectionError(all_user.extra_message)
+        return all_user

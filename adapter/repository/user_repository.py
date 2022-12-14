@@ -121,3 +121,20 @@ class UserRepository:
             return user
         except InvalidId:
             return None
+
+    def find_user_by_name(self, name: str) -> User \
+                                                | TimeoutConnectionError \
+                                                | None:
+        try:
+            res = self.get_user_collection().find()
+        except ServerSelectionTimeoutError as e:
+            return TimeoutConnectionError(extra_message=e._message)
+        ret = []
+        try:
+            for user in res:
+                if name.upper() in str(user["name"]):
+                    user["user_id"] = str(user["_id"])
+                    ret.append(User.parse_obj(user))
+            return ret
+        except ServerSelectionTimeoutError as e:
+            return TimeoutConnectionError(extra_message=e._message)

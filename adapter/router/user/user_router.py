@@ -130,3 +130,7 @@ def update_user(user: User = Body(example=UPDATE_USER_BODY_EXAMPLE)):
 )
 def update_user_description(update_user_description_body: UpdateUserDescriptionBody):
     return user_handler.update_user_description(update_user_description_body)
+
+@router.get("/user/")
+def find_user_by_name(name: str):
+    return user_handler.find_user_by_name(name)
