@@ -34,6 +34,11 @@ class UserRepository:
                                             | None:
         user_dict = user.dict()
         del user_dict["user_id"]
+        if "binus.ac.id" in user_dict["email"]:
+            user_dict["user_type"] = "Student"
+        else:
+            user_dict["user_type"] = "Lecturer"
+            
         try:
             res = self.get_user_collection().insert_one(user_dict)
         except ServerSelectionTimeoutError as e:

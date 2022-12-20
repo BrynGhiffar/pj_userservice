@@ -10,3 +10,4 @@ class User(BaseModel):
     profile_pic: str
     graduation_year: str
     current_semester: str
+    user_type: str
