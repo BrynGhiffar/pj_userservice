@@ -46,23 +46,41 @@ def find_class_by_id(class_id: str):
     return class_handler.find_classes_by_id(class_id)
 
 # Need bug fixing
-# @router.get(
-#     "/",
-#     response_model=list[Class],
-#     responses={
-#         200: {
-#             "description": "returns all users in the database",
-#             "content": {
-#                 "application/json": {
-#                     "example": FIND_ALL_USER_EXAMPLE
-#                 }
-#             }
-#         }
-#     }
-# )
+@router.get(
+    "/",
+    response_model=list[Class],
+    responses={
+        200: {
+            "description": "returns all classes in the database",
+            "content": {
+                "application/json": {
+                    "example": FIND_ALL_USER_EXAMPLE
+                }
+            }
+        }
+    }
+)
 
-# def find_all_classes():
-#     return class_handler.find_all_classes()
+def find_all_classes():
+    return class_handler.find_all_classes()
+
+@router.get(
+    "/{lecturer_id}/",
+    response_model=list[Class],
+    responses={
+        200: {
+            "description": "returns all classes in the database",
+            "content": {
+                "application/json": {
+                    "example": FIND_ALL_USER_EXAMPLE
+                }
+            }
+        }
+    }
+)
+
+def find_all_classes(lecturer_id):
+    return class_handler.find_classes_by_lecturer_id(lecturer_id)
 
 @router.post(
     "/",
