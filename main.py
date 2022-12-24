@@ -5,6 +5,7 @@ import uvicorn
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from adapter.router.user import user_router as user
+from adapter.router.classes import class_router as classes
 from dotenv import load_dotenv
 
 import datetime
@@ -12,6 +13,7 @@ import os
 
 load_dotenv()
 USER_BASE_PATH = os.getenv("BASE_PATH")
+CLASSES_BASE_PATH = os.getenv("BASE_PATH_CLASSES")
 VERSION_1 = os.getenv("VERSION_1")
 FE_URL = os.getenv("FE_URL")
 
@@ -19,6 +21,10 @@ app = FastAPI()
 app.include_router(
     user.router,
     prefix=f"{USER_BASE_PATH}{VERSION_1}",
+)
+app.include_router(
+    classes.router,
+    prefix=f"{CLASSES_BASE_PATH}{VERSION_1}",
 )
 
 origins = [

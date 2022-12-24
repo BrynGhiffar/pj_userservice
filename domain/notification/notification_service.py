@@ -22,3 +22,13 @@ class NotificationService:
             + "user name: " + user_name + "\n" \
             + "```\n"
         self.send_message(title, message, body)
+
+    def send_classes_created_notification(self, class_id: str, name: str) -> None:
+    
+        title = "Class Created!"
+        message = "A class was created."
+        body = "```\n" \
+            + "class id: " + class_id + "\n" \
+            + "name: " + name + "\n" \
+            + "```\n"
+        self.send_message(title, message, body)
