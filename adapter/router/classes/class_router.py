@@ -45,39 +45,39 @@ class_handler = ClassHandler(
 def find_class_by_id(class_id: str):
     return class_handler.find_classes_by_id(class_id)
 
-@router.get(
-    "/",
-    response_model=list[Class],
-    responses={
-        200: {
-            "description": "returns all users in the database",
-            "content": {
-                "application/json": {
-                    "example": FIND_ALL_USER_EXAMPLE
-                }
-            }
-        }
-    }
-)
-
 # Need bug fixing
-# def find_all_classes():
-#     return class_handler.find_all_classes()
-
-# @router.post(
+# @router.get(
 #     "/",
-#     response_model=CreateClassResponse,
+#     response_model=list[Class],
 #     responses={
 #         200: {
-#             "description": "returned when all users with the given provider is found",
+#             "description": "returns all users in the database",
 #             "content": {
 #                 "application/json": {
-#                     "example": CREATE_USER_RESPONSE_EXAMPLE
+#                     "example": FIND_ALL_USER_EXAMPLE
 #                 }
 #             }
 #         }
 #     }
 # )
+
+# def find_all_classes():
+#     return class_handler.find_all_classes()
+
+@router.post(
+    "/",
+    response_model=CreateClassResponse,
+    responses={
+        200: {
+            "description": "returned when all users with the given provider is found",
+            "content": {
+                "application/json": {
+                    "example": CREATE_USER_RESPONSE_EXAMPLE
+                }
+            }
+        }
+    }
+)
 def create_class(classes: Class):
     return class_handler.create_classes(classes)
 
