@@ -62,23 +62,45 @@ class ClassRepository:
             return classes
         except InvalidId:
             return None
+
+    def find_classes_by_lecturer_id(self, lecturer_id: str) -> list[Class] \
+                                            | TimeoutConnectionError \
+                                            | None:
+
+        try:
+            res = self.get_classes_collection().find({"lecturer_id": lecturer_id})
+        except ServerSelectionTimeoutError as e:
+            return TimeoutConnectionError(extra_message=e._message)
+
+        ret = []
+
+        # if no classes with the id was found, return None
+        if not res:
+            return None
+        try:
+            for classes in res:
+                classes["class_id"] = str(classes["_id"])
+                ret.append(Class.parse_obj(classes))
+            return ret
+        except ServerSelectionTimeoutError as e:
+            return TimeoutConnectionError(extra_message=e._message)
     
     # Need bug fixing
-    # def find_all_classes(self) -> list[Class] \
-    #                             | TimeoutConnectionError \
-    #                             :
-    #     try:
-    #         res = self.get_classes_collection().find()
-    #     except ServerSelectionTimeoutError as e:
-    #         return TimeoutConnectionError(extra_message=e._message)
-    #     ret = []
-    #     try:
-    #         for classes in res:
-    #             classes["class_id"] = str(classes["_id"])
-    #             ret.append(Class.parse_obj(classes))
-    #         return ret[::-1]
-    #     except ServerSelectionTimeoutError as e:
-    #         return TimeoutConnectionError(extra_message=e._message)
+    def find_all_classes(self) -> list[Class] \
+                                | TimeoutConnectionError \
+                                | None:
+        try:
+            res = self.get_classes_collection().find()
+        except ServerSelectionTimeoutError as e:
+            return TimeoutConnectionError(extra_message=e._message)
+        ret = []
+        try:
+            for classes in res:
+                classes["class_id"] = str(classes["_id"])
+                ret.append(Class.parse_obj(classes))
+            return ret
+        except ServerSelectionTimeoutError as e:
+            return TimeoutConnectionError(extra_message=e._message)
                             
     def update_class(self, classes: Class) -> Class \
                                         | TimeoutConnectionError \

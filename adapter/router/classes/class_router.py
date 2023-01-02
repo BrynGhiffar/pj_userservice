@@ -45,12 +45,13 @@ class_handler = ClassHandler(
 def find_class_by_id(class_id: str):
     return class_handler.find_classes_by_id(class_id)
 
+# Need bug fixing
 @router.get(
     "/",
     response_model=list[Class],
     responses={
         200: {
-            "description": "returns all users in the database",
+            "description": "returns all classes in the database",
             "content": {
                 "application/json": {
                     "example": FIND_ALL_USER_EXAMPLE
@@ -60,24 +61,41 @@ def find_class_by_id(class_id: str):
     }
 )
 
-# Need bug fixing
-# def find_all_classes():
-#     return class_handler.find_all_classes()
+def find_all_classes():
+    return class_handler.find_all_classes()
 
-# @router.post(
-#     "/",
-#     response_model=CreateClassResponse,
-#     responses={
-#         200: {
-#             "description": "returned when all users with the given provider is found",
-#             "content": {
-#                 "application/json": {
-#                     "example": CREATE_USER_RESPONSE_EXAMPLE
-#                 }
-#             }
-#         }
-#     }
-# )
+@router.get(
+    "/{lecturer_id}/",
+    response_model=list[Class],
+    responses={
+        200: {
+            "description": "returns all classes in the database",
+            "content": {
+                "application/json": {
+                    "example": FIND_ALL_USER_EXAMPLE
+                }
+            }
+        }
+    }
+)
+
+def find_all_classes(lecturer_id):
+    return class_handler.find_classes_by_lecturer_id(lecturer_id)
+
+@router.post(
+    "/",
+    response_model=CreateClassResponse,
+    responses={
+        200: {
+            "description": "returned when all users with the given provider is found",
+            "content": {
+                "application/json": {
+                    "example": CREATE_USER_RESPONSE_EXAMPLE
+                }
+            }
+        }
+    }
+)
 def create_class(classes: Class):
     return class_handler.create_classes(classes)
 

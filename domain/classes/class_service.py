@@ -56,6 +56,17 @@ class ClassService:
             return ClassWithClassIdNotFoundError(class_id)
         return res
 
+    def find_class_by_id(self, lecturer_id: str) -> Class \
+                                                | DatabaseConnectionError \
+                                                | ClassWithClassIdNotFoundError \
+                                                :
+        res = self.class_repository.find_classes_by_lecturer_id(lecturer_id)
+        if isinstance(res, TimeoutConnectionError):
+            return DatabaseConnectionError(res.extra_message)
+        if not res:
+            return ClassWithClassIdNotFoundError(lecturer_id)
+        return res
+
     def create_class(self, classes: Class) -> Class \
                                         | ClassCreationError \
                                         | DatabaseConnectionError \
@@ -98,8 +109,8 @@ class ClassService:
         return updated_classes
     
     # Need bug fixing
-    # def find_all_classes(self) -> list[Class] | DatabaseConnectionError:
-    #     all_classes = self.class_repository.find_all_classes()
-    #     if isinstance(all_classes, TimeoutConnectionError):
-    #         return DatabaseConnectionError(all_classes.extra_message)
-    #     return all_classes
+    def find_all_classes(self) -> list[Class] | DatabaseConnectionError:
+        all_classes = self.class_repository.find_all_classes()
+        if isinstance(all_classes, TimeoutConnectionError):
+            return DatabaseConnectionError(all_classes.extra_message)
+        return all_classes
