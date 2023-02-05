@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 import datetime
 import os
 
-load_dotenv()
+# load_dotenv()
 USER_BASE_PATH = os.getenv("BASE_PATH")
 CLASSES_BASE_PATH = os.getenv("BASE_PATH_CLASSES")
 VERSION_1 = os.getenv("VERSION_1")
